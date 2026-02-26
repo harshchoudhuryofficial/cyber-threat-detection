@@ -11,8 +11,8 @@ from xgboost import XGBClassifier
 
 
 # Load dataset
-train = pd.read_csv("data/KDDTrain+.txt", header=None)
-test = pd.read_csv("data/KDDTest+.txt", header=None)
+train = pd.read_csv("KDDTrain+.txt", header=None)
+test = pd.read_csv("KDDTest+.txt", header=None)
 
 col_names = [
     "duration", "protocol_type", "service", "flag", "src_bytes", "dst_bytes",
@@ -120,3 +120,4 @@ joblib.dump(model, "cyber_threat_model.pkl")
 sample = X_test.iloc[0:1]
 pred = model.predict(sample)[0]
 print("Sample Prediction:", "Attack" if pred == 1 else "Normal")
+
