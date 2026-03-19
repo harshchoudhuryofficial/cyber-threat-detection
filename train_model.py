@@ -1,3 +1,7 @@
+"""
+This module trains the machine learning model for cyber threat detection.
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import joblib
@@ -166,4 +170,3 @@ else:
     print("Prediction: Normal Traffic")
 
 print("\nProgram Finished Successfully")
-
