@@ -17,11 +17,9 @@ from xgboost import XGBClassifier
 
 print("Step 1: Loading Dataset...")
 
-# Load dataset
 train = pd.read_csv("KDDTrain+.txt", header=None)
 test = pd.read_csv("KDDTest+.txt", header=None)
 
-# Column names
 col_names = [
     "duration", "protocol_type", "service", "flag", "src_bytes", "dst_bytes",
     "land", "wrong_fragment", "urgent", "hot", "num_failed_logins",
@@ -45,7 +43,6 @@ print("Step 2: Preprocessing Data...")
 train.drop("difficulty", axis=1, inplace=True)
 test.drop("difficulty", axis=1, inplace=True)
 
-
 train["label"] = (train["label"] != "normal").astype(int)
 test["label"] = (test["label"] != "normal").astype(int)
 
@@ -54,16 +51,15 @@ full_data = pd.concat([train, test], ignore_index=True)
 X = full_data.drop("label", axis=1)
 y = full_data["label"]
 
-
 X = pd.get_dummies(X)
 
 print("Dataset shape:", X.shape)
 
 print("Step 3: Visualizing Class Distribution...")
 
-plt.figure(figsize=(6,5))
-y.value_counts().plot(kind="bar", color=["green","red"])
-plt.xticks([0,1],["Normal","Attack"], rotation=0)
+plt.figure(figsize=(6, 5))
+y.value_counts().plot(kind="bar", color=["green", "red"])
+plt.xticks([0, 1], ["Normal", "Attack"], rotation=0)
 plt.title("Class Distribution")
 plt.xlabel("Class")
 plt.ylabel("Number of Samples")
@@ -78,7 +74,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y,
     random_state=42
 )
-
 
 print("Step 5: Training XGBoost Model...")
 
@@ -116,11 +111,11 @@ print("Step 7: Confusion Matrix...")
 
 cm = confusion_matrix(y_test, y_pred)
 
-plt.figure(figsize=(6,5))
+plt.figure(figsize=(6, 5))
 plt.imshow(cm, cmap="Blues")
 
-plt.xticks([0,1],["Normal","Attack"])
-plt.yticks([0,1],["Normal","Attack"])
+plt.xticks([0, 1], ["Normal", "Attack"])
+plt.yticks([0, 1], ["Normal", "Attack"])
 
 plt.xlabel("Predicted Label")
 plt.ylabel("Actual Label")
@@ -128,21 +123,21 @@ plt.title("Confusion Matrix")
 
 for i in range(2):
     for j in range(2):
-        plt.text(j,i,cm[i,j],ha="center",va="center")
+        plt.text(j, i, cm[i, j], ha="center", va="center")
 
 plt.tight_layout()
 plt.show()
 
 print("Step 8: ROC Curve...")
 
-y_prob = model.predict_proba(X_test)[:,1]
+y_prob = model.predict_proba(X_test)[:, 1]
 
 fpr, tpr, _ = roc_curve(y_test, y_prob)
 roc_auc = auc(fpr, tpr)
 
-plt.figure(figsize=(6,5))
+plt.figure(figsize=(6, 5))
 plt.plot(fpr, tpr, label=f"AUC = {roc_auc:.3f}")
-plt.plot([0,1],[0,1],"--")
+plt.plot([0, 1], [0, 1], "--")
 
 plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
@@ -151,7 +146,6 @@ plt.title("ROC Curve")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
 
 print("Step 9: Saving Model...")
 
